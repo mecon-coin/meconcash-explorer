@@ -1,0 +1,59 @@
+extends layout
+
+block content
+
+    section.fdb-block.fp-active(data-block-type='contents' draggable='true')
+        .container
+                .row
+                    .col-12
+
+                        table#block-table.table.table-hover.table-sm.table-dark
+                            thead
+                                tr
+                                    th(scope='col' colspan='7') MCH block: #{block.hash}
+                                tr
+                                    th(scope='col') Height
+                                    th(scope='col') Difficulty
+                                    th(scope='col') Confirmations
+                                    th(scope='col') Size (kB)
+                                    th(scope='col') Bits
+                                    th(scope='col') Nonce
+                                    th(scope='col') Timestamp
+                            tbody
+                                tr
+                                    - var block_size = block.size/1024
+                                    - var time = new Date(block.time * 1000).toLocaleString()
+                                    td(scope='row')= block.height
+                                    td= block.difficulty.toFixed(4)
+                                        a.text-white(href='/block/#{0000}')= 0000
+                                    td= block.confirmations
+                                    td= block_size.toFixed(2)
+                                    td= block.bits
+                                    td= block.nonce
+                                    td= time
+
+                .row
+                    .col-12
+                        table#block-table.table.table-hover.table-sm.table-dark
+                            if txs == 'GENESIS'
+                                tr
+                                    td.text-center GENESIS BLOCK
+                            else
+                                thead
+                                    tr
+                                        th(scope='col' colspan='3') Latest Transactions
+                                    tr
+                                        th(scope='col') Hash
+                                        th(scope='col') Recipients
+                                        th(scope='col') Amount (MCH)
+                                tbody
+                                    each txn in txs
+                                        tr
+                                            td
+                                                a.text-white(href='/tx/#{txn.txid}')= txn.txid
+                                            td= txn.vout.length
+                                            if txn.vout.length > 0
+                                                - var total = txn.total / 100000000
+                                                td= total.toFixed(8)
+                                            else
+                                                td= txn.total.toFixed(8)

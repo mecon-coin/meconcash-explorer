@@ -1,0 +1,31 @@
+{
+    "apps": [{
+        "name": "Explorer",
+        "script": "./bin/www",
+        "watch": false,
+        "env": {
+            "COMMON_VARIABLE": "true",
+            "PORT": 3000,
+            "NODE_ENV": "development"
+        },
+        "env_production": {
+            "COMMON_VARIABLE": "true",
+            "PORT": 80,
+            "NODE_ENV": "production"
+        }
+    }, {
+        "name": "Sync",
+        "script": "./sync.js",
+        "watch": false,
+        "env": {
+            "COMMON_VARIABLE": "true",
+            "PORT": 3000,
+            "NODE_ENV": "development"
+        },
+        "env_production": {
+            "COMMON_VARIABLE": "true",
+            "PORT": 80,
+            "NODE_ENV": "production"
+        }
+    }]
+}

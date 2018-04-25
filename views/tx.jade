@@ -1,0 +1,65 @@
+extends layout
+
+block content
+
+    - var confirms = (blockcount - tx.blockindex)
+    - var time = new Date(tx.timestamp * 1000).toLocaleString()
+
+    section.fdb-block.fp-active(data-block-type='contents' draggable='true')
+        .container
+            .row
+                .col-12
+
+                    table#block-table.table.table-hover.table-sm.table-dark
+                        thead
+                            tr
+                                th(scope='col' colspan='3') MCH txid: #{tx.txid}
+                            tr
+                                th(scope='col') Confirmations
+                                th(scope='col') Block Hash
+                                th(scope='col') Timestamp
+                        tbody
+                            tr
+                                td(scope='row')= confirms
+                                td
+                                    a.text-white(href='/block/#{tx.blockhash}')= tx.blockhash
+                                td= time
+
+            div.row.pt-2
+                div.col-6.col-md-6
+                    table.table.table-hover.table-dark
+                        thead
+                            tr
+                                th.col Input Addresses
+                            tr
+                                th(colspan='2') Address
+                        tbody
+                            if tx.vin.length > 0
+                                each r in tx.vin
+                                    if r.addresses == 'coinbase'
+                                        tr
+                                            td.bg-info.text-white.text-center(colspan='2') New Coin
+                                    else
+                                        - var ramount = r.amount / 100000000
+                                        tr
+                                            td
+                                                a.text-white(href='/address/#{r.addresses}')= r.addresses
+                                            td= ramount
+                            else
+                                tr
+                                    td.text-center PoS
+                div.col-6.col-md-6
+                    table.table.table-hover.table-dark
+                        thead
+                            tr
+                                th.col(colspan='2') Recipients
+                            tr
+                                th Address
+                                th Amount (MCH)
+                        tbody
+                            each r in tx.vout
+                                - var ramount = r.amount / 100000000
+                                tr
+                                    td
+                                        a.text-white(href='/address/#{r.addresses}')= r.addresses
+                                    td= ramount

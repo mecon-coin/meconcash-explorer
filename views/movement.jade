@@ -1,0 +1,93 @@
+extends layout
+
+block content
+
+  section(class='fdb-block fp-active' data-block-type='contents' draggable='true')
+    .container
+      .row
+        .col-12
+
+          table#block-table.table.table-hover.table-sm.table-dark
+            thead
+              tr
+                th(scope='col') timestamp
+                th(scope='col') txid
+                th(scope='col') amount
+            tbody
+              tr
+                td loading...
+                td loading...
+                td
+                    code loading...
+
+          nav(aria-label='Page navigation')
+            ul.pagination.justify-content-end
+              li.page-item
+                a.page-link(href='javascript:changePage("-")') Previous
+              li.page-item
+                a.page-link(href='#') 1
+              li.page-item
+                a.page-link(href='javascript:changePage("+")') Next
+
+  script.
+    var page = 1;
+    var maxPage = 1;
+    var txs;
+
+    function loadLasttxs() {
+      $.get( '/ext/getlasttxs/#{process.env.MOVE_MIN}', function( result ) {
+        if (result.data.length) {
+          txs = result.data;
+          maxPage = Math.ceil(txs.length / 10);
+
+          drawTable();
+        }
+      });
+    }
+
+    function changePage(selectedPage) {
+      if (selectedPage == '-') page--;
+      else if (selectedPage == '+') page++;
+      else page = selectedPage;
+
+      drawTable();
+    }
+
+    function drawTable() {
+      $('#block-table tbody').html('');
+
+      var start = ((page - 1) * 10);
+      for (var i = start; i < start + 10 && i < txs.length; i++) {
+        var row = '<tr>';
+        row = row + '<td>' + (new Date(txs[i]['timestamp'] * 1000)).toLocaleString() + '</td>';
+        row = row + '<td><a class="text-white" href="/tx/' + txs[i]['txid'] + '">' + txs[i]['txid'] + '</a></td>';
+
+        if ((txs[i]['total'] / 100000000) > parseInt('#{process.env.MOVE_HIGH}')) {
+          row = row + '<td class=\'text-danger\'>' + (txs[i]['total'] / 100000000).toFixed(8) + '</td>';
+        } else if ((txs[i]['total'] / 100000000) < parseInt('#{process.env.MOVE_LOW}')) {
+          row = row + '<td class=\'text-warning\'>' + (txs[i]['total'] / 100000000).toFixed(8) + '</td>';
+        } else {
+          row = row + '<td class=\'text-success\'>' + (txs[i]['total'] / 100000000).toFixed(8) + '</td>';
+        }
+        row = row + '</tr>';
+        $('#block-table tbody').append(row);
+      }
+
+      $('.pagination').html('');
+      $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("-")\' class="page-link">Previous</a></li>');
+      for (var i = 0; i < maxPage; i++) {
+        $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("' + (i + 1) + '")\' class="page-link">' + (i + 1) + '</a></li>');
+        if (i + 1 == page) $('.pagination li').last().addClass('active');
+      }
+      $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("+")\' class="page-link">Next</a></li>');
+
+      if (page == 1) $('.pagination li').first().addClass('disabled');
+      if (page == maxPage) $('.pagination li').last().addClass('disabled');
+    }
+
+    $(document).ready(function() {
+      loadLasttxs();
+    });
+    setInterval(function() {
+      loadLasttxs();
+    }, 60000);

@@ -1,0 +1,74 @@
+extends layout
+
+block content
+
+    - var balance = (address.received - address.sent) / 100000000;
+    - var sent = address.sent /100000000
+    - var received = address.received / 100000000
+
+    section.fdb-block.fp-active(data-block-type='contents' draggable='true')
+        .container
+                .row
+                    .col-12
+
+                        table#block-table.table.table-hover.table-sm.table-dark
+                            thead
+                                tr
+                                    th(scope='col')= address.a_id
+                                tr
+                                    th(scope='col') Total Sent (MCH)
+                                    if address.a_id !== 'coinbase'
+                                        th(scope='col') Total Received (MCH)
+                                        th(scope='col') Balance (MCH)
+                            tbody
+                                tr
+                                    td(scope='row')= sent.toFixed(8)
+                                    if address.a_id !== 'coinbase'
+                                        td= received.toFixed(8)
+                                        td= balance.toFixed(8)
+
+                .row
+                    .col-12
+
+                        table#block-table.table.table-hover.table-sm.table-dark
+                            thead
+                                tr
+                                    th(scope='col' colspan='3') Latest Transactions
+                                tr
+                                    th(scope='col') Timestamp
+                                    th(scope='col') Hash
+                                    th(scope='col') Amount (MCH)
+                            tbody
+                                each tx in txs
+                                    - var time = new Date(tx.timestamp * 1000).toLocaleString()
+                                    tr
+                                        td= time
+                                        td
+                                            a.text-white(href='/tx/#{tx.txid}')= tx.txid
+                                        - var done = false
+                                        - var out = 0
+                                        - var vin = 0
+                                        each r in tx.vout
+                                            if r.addresses == address.a_id
+                                                - out = r.amount
+                                        each s in tx.vin
+                                            if s.addresses == address.a_id
+                                                - vin = s.amount
+                                        if out > 0 && vin > 0
+                                            td.info
+                                                - var amount = (out - vin) / 100000000
+                                                if amount < 0
+                                                    - amount = amount * -1
+                                                    | - #{amount.toFixed(8)}
+                                                else if amount > 0
+                                                    | + #{amount.toFixed(8)}
+                                                else
+                                                    | #{amount.toFixed(8)}
+                                        else if out > 0
+                                            td.success
+                                                - var amount = out / 100000000
+                                                | + #{amount.toFixed(8)}
+                                        else
+                                            td.danger
+                                                - var amount = vin / 100000000
+                                                | - #{amount.toFixed(8)}

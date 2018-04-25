@@ -1,0 +1,138 @@
+doctype html
+html
+  head
+    title='Meconcoin - Block Explorer'
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/froala-design-blocks/1.0.2/css/froala_blocks.min.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css')
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+
+    script(src='https://code.jquery.com/jquery-3.3.1.min.js')
+
+  body
+
+    header.bg-dark(data-block-type='headers')
+      .container
+        nav.navbar.navbar-expand-md.no-gutters
+          div.col-2.text-left
+            a(href='/')
+              img(src='/images/img_logo.png' height='30' alt='image')
+          
+          button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+
+          div#navbarNav.collapse.navbar-collapse.justify-content-center.col-md-8
+            ul.navbar-nav.justify-content-center
+              li.nav-item.Explorer
+                a.nav-link(href='/')
+                  i.fa.fa-search  Explorer
+                  span.sr-only (current)
+              li.nav-item.Movement
+                a.nav-link(href='/movement')
+                  i.fa.fa-money  Movement
+              li.nav-item.info
+                a.nav-link(href='/info')
+                  i.fa.fa-info-circle  API
+
+          ul.navbar-nav.col-2.justify-content-end.d-none.d-md-flex
+            li.nav-item
+              a.nav-link(target='_blank' href='https://github.com/mecon-coin/meconcash-explorer')
+                i(class='fa fa-github')
+            //- Hide Homepage link for now
+            //- li.nav-item
+            //-   a.nav-link(target='_blank' href='https://band.us/band/62648805')
+            //-     i(class='fa fa-home')
+
+    section.fdb-block(data-block-type='contents' draggable='true' style='padding-bottom: 0;')
+      .container
+        .row
+          div.col.text-center
+            h1 Meconcash Block Explorer
+
+        div.row.pt-4
+          div.col-6.col-md-3
+            table.table.table-hover.table-dark
+              thead
+                tr
+                  th.col Network (GH/s)
+              tbody
+                tr
+                  td#network loading...
+          div.col-6.col-md-3
+            table.table.table-hover.table-dark
+              thead
+                tr
+                  th.col Difficulty
+              tbody
+                tr
+                  td#difficulty loading...
+          div.col-6.col-md-3.col-md-3.mt-4.mt-md-0
+            table.table.table-hover.table-dark
+              thead
+                tr
+                  th.col Coin Supply
+              tbody
+                tr
+                  td#coinsupply loading...
+          div.col-6.col-md-3.col-md-3.mt-4.mt-md-0
+            table.table.table-hover.table-dark
+              thead
+                tr
+                  th.col Blocks
+              tbody
+                tr
+                  td#blocks loading...
+
+        form.form-inline(method='post', action='/search')
+          div.form-group.col-10
+            input.form-control(type='text' name='search' placeholder='block height / block hash / tx hash / address' style='width: 100%;')
+          div.form-group.col-2
+            button.btn.btn-primary(type='submit') Search
+
+    block content
+
+    footer.fdb-block.footer-small.bg-dark(data-block-type='footers')
+      .container
+        div.row.align-items-center
+          div.col-12.col-md-8
+            ul.nav.justify-content-center.justify-content-md-start
+              li.nav-item
+                a.nav-link.Explorer(href='/') Explorer
+              li.nav-item
+                a.nav-link.Movement(href='/movement') Movement
+              li.nav-item
+                a.nav-link.info(href='/info') info
+
+            code#connections loading... connections
+
+          div.col-12.col-md-4.mt-4.mt-md-0.text-center.text-md-right © 2018 Meconcash. All Rights Reserved
+
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js')
+
+    script.
+      $(document).ready(function() {
+        $('.#{active}').addClass('active');
+      });
+
+    script.
+      function loadSummary() {
+        $.get( '/ext/summary', function( result ) {
+          if (result.data.length) {
+            var summary = result.data[0];
+            $('#network').html(isNaN(summary.hashrate) ? summary.hashrate : (summary.hashrate / 1000).toFixed(4))
+            $('#difficulty').html(summary.difficulty);
+            $('#coinsupply').html(summary.supply);
+            $('#blocks').html(summary.blockcount);
+            $('#connections').html(summary.connections + ' connections');
+          }
+        });
+      }
+      $(document).ready(function() {
+        loadSummary();
+      });
+      setInterval(function() {
+        loadSummary();
+      }, 60000);
