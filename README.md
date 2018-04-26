@@ -8,15 +8,50 @@ Meconcash Block Explorer
 ## Requires
 
 - Node.js
+
+  > [how to install node.js](https://nodejs.org/en/download/package-manager/)
+
 - pm2
+
+  > `sudo npm i -g pm2`
+
 - mongodb
+
+  > [how to install mongodb](https://docs.mongodb.com/manual/installation/)
+
 - meconcashd
+
+  > [Meconcash-core github](https://github.com/mecon-coin/meconcash-core)
 
 ## Create Database
 
+Enter MongoDB CLI:
+
 `$ mongo`
+
+Create database:
 
 `> use explorerdb`
 
+Create user with read/write permission:
+
 `> db.createUser( { user: "meconuser", pwd: "meconpass", roles: ["readWrite"] } )`
+
+## Start Explorer
+
+`pm2 reload pm2.config.json --env production`
+
+## Wallet
+
+Meconcash Explorer requires meconcash core deamon with the following options
+
+`meconcashd -daemon -txindex`
+
+## Syncing database with the blockchain
+
+Any database sync issue can be solved by doing the following command
+
+`pm2 delete Sync`
+
+`./sync.js reindex`
 
