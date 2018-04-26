@@ -41,6 +41,21 @@ Create user with read/write permission:
 
 `pm2 reload pm2.config.json --env production`
 
+> Please make sure that you have added additional environment variables like this before
+>
+> You may want to add the these lines into your CI process.
+>
+> ```shell
+> echo "ROLLBAR=${ROLLBAR}" >> .env
+> echo "MOESIF=${MOESIF}" >> .env
+> echo "DB_USER=${DB_USER}" >> .env
+> echo "DB_PASS=${DB_PASS}" >> .env
+> echo "WALLET_HOST=${WALLET_HOST}" >> .env
+> echo "WALLET_PORT=${WALLET_PORT}" >> .env
+> echo "WALLET_USER=${WALLET_USER}" >> .env
+> echo "WALLET_PASS=${WALLET_PASS}" >> .env
+> ```
+
 ## Wallet
 
 Meconcash Explorer requires meconcash core deamon with the following options
