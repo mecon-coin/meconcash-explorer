@@ -9,20 +9,7 @@ var indexRouter = require('./routes/index');
 var app = express();
 
 // Additional Libraries
-const Rollbar = require('rollbar')
-const moesifExpress = require('moesif-express')
 const bitcoinapi = require('bitcoin-node-api')
-
-// Crash Reporting
-const rollbar = new Rollbar({
-  accessToken: process.env.ROLLBAR,
-  captureUncaught: true,
-  captureUnhandledRejections: true
-})
-
-// Monitoring
-const moesif = moesifExpress({applicationId: process.env.MOESIF})
-app.use(moesif)
 
 // Bitcoinapi
 const walletSettings = {
