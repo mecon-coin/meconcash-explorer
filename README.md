@@ -41,9 +41,9 @@ Create user with read/write permission:
 
 `pm2 reload pm2.config.json --env production`
 
-> Please make sure that you have added additional environment variables like this before
+> Please make sure that your explorer have all the required environmental variables.
 >
-> You may want to add the these lines into your CI process.
+> You may want to add the following lines in the middle of your CI module before start explorer.
 >
 > ```shell
 > echo "ROLLBAR=${ROLLBAR}" >> .env
@@ -58,7 +58,7 @@ Create user with read/write permission:
 
 ## Wallet
 
-Meconcash Explorer requires meconcash core deamon with the following options
+Meconcash Explorer requires running meconcash core deamon with the following options
 
 `meconcashd -daemon -txindex`
 
