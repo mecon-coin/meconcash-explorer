@@ -22,7 +22,7 @@ block content
                             tbody
                                 tr
                                     - var block_size = block.size/1024
-                                    - var time = new Date(block.time * 1000).toLocaleString()
+                                    - var time = (new Date(block.time * 1000)).toLocaleString('ko-KR')
                                     td(scope='row')= block.height
                                     td= block.difficulty.toFixed(4)
                                         a.text-white(href='/block/#{0000}')= 0000
