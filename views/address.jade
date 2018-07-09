@@ -40,7 +40,7 @@ block content
                                     th(scope='col') Amount (MCH)
                             tbody
                                 each tx in txs
-                                    - var time = new Date(tx.timestamp * 1000).toLocaleString()
+                                    - var time = (new Date(tx.timestamp * 1000)).toLocaleString()
                                     tr
                                         td= time
                                         td
