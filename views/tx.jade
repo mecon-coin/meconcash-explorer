@@ -3,7 +3,7 @@ extends layout
 block content
 
     - var confirms = (blockcount - tx.blockindex)
-    - var time = (new Date(tx.timestamp * 1000)).toLocaleString('ko-KR')
+    - var time = (new Date(tx.timestamp * 1000)).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })
 
     section.fdb-block.fp-active(data-block-type='contents' draggable='true')
         .container
