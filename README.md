@@ -12,7 +12,9 @@ Meconcash Block Explorer
 
 - pm2
 
-  > `sudo npm i -g pm2`
+  > ```shell
+  > sudo npm i -g pm2
+  > ```
 
 - mongodb
 
@@ -26,51 +28,71 @@ Meconcash Block Explorer
 
 Enter MongoDB CLI:
 
-`$ mongo`
+```shell
+$ mongo
+```
 
 Create database:
 
-`> use explorerdb`
+```shell
+> use explorerdb
+```
 
 Create user with read/write permission:
 
-`> db.createUser( { user: "meconuser", pwd: "meconpass", roles: ["readWrite"] } )`
+```shell
+> db.createUser( { user: "meconuser", pwd: "meconpass", roles: ["readWrite"] } )
+```
 
 ## Start Explorer
 
-`pm2 reload pm2.config.json --env production`
+```shell
+$ pm2 reload pm2.config.json --env production
+```
 
 > Please make sure that your explorer have all the required environmental variables.
 >
 > You may want to add the following lines in the middle of your CI module before start explorer.
 >
 > ```shell
-> echo "ROLLBAR=${ROLLBAR}" >> .env
-> echo "MOESIF=${MOESIF}" >> .env
-> echo "DB_USER=${DB_USER}" >> .env
-> echo "DB_PASS=${DB_PASS}" >> .env
-> echo "WALLET_HOST=${WALLET_HOST}" >> .env
-> echo "WALLET_PORT=${WALLET_PORT}" >> .env
-> echo "WALLET_USER=${WALLET_USER}" >> .env
-> echo "WALLET_PASS=${WALLET_PASS}" >> .env
+> $ echo "ROLLBAR=${ROLLBAR}" >> .env
+> $ echo "MOESIF=${MOESIF}" >> .env
+> $ echo "DB_USER=${DB_USER}" >> .env
+> $ echo "DB_PASS=${DB_PASS}" >> .env
+> $ echo "WALLET_HOST=${WALLET_HOST}" >> .env
+> $ echo "WALLET_PORT=${WALLET_PORT}" >> .env
+> $ echo "WALLET_USER=${WALLET_USER}" >> .env
+> $ echo "WALLET_PASS=${WALLET_PASS}" >> .env
 > ```
 
 ## Wallet
 
 Meconcash Explorer requires running meconcash core deamon with the following options
 
-`meconcashd -daemon -txindex`
-
-## Syncing database with the blockchain
-
-Any database sync issue can be solved by doing the following command
-
-`pm2 delete Sync`
-
-`./sync.js reindex`
+```shell
+$ meconcashd -daemon -txindex
+```
 
 ## Troubleshooting
 
 If block explorer is not updating new blocks
 
-`sudo rm ~/meconcash-explorer/tmp/index.pid`
+```shell
+$ sudo rm ~/meconcash-explorer/tmp/index.pid
+```
+
+### Syncing database with the blockchain
+
+Any database sync issue can be solved by doing the following command
+
+```shell
+$ pm2 delete Sync
+$ ./sync.js reindex
+```
+
+### How to restart service
+
+```shell
+$ sudo su -
+$ pm2 restart all
+```
