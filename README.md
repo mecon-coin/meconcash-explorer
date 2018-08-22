@@ -88,7 +88,7 @@ $ ./sync.js reindex
 
 ```shell
 $ sudo su -
-$ pm2 restart all
+# pm2 restart all
 ```
 
 If block explorer is not updating new blocks...
