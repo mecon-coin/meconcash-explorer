@@ -70,3 +70,8 @@ Any database sync issue can be solved by doing the following command
 
 `./sync.js reindex`
 
+## Troubleshooting
+
+If block explorer is not updating new blocks
+
+`sudo rm ~/meconcash-explorer/tmp/index.pid`
