@@ -75,12 +75,6 @@ $ meconcashd -daemon -txindex
 
 ## Troubleshooting
 
-If block explorer is not updating new blocks
-
-```shell
-$ sudo rm ~/meconcash-explorer/tmp/index.pid
-```
-
 ### Syncing database with the blockchain
 
 Any database sync issue can be solved by doing the following command
@@ -95,4 +89,10 @@ $ ./sync.js reindex
 ```shell
 $ sudo su -
 $ pm2 restart all
+```
+
+If block explorer is not updating new blocks...
+
+```shell
+$ sudo rm ~/meconcash-explorer/tmp/index.pid
 ```
