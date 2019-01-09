@@ -102,7 +102,7 @@ block content
       $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("+")\' class="page-link">Next</a></li>');
 
       if (page == 1) $('.pagination li').first().addClass('disabled');
-      if (page == maxPage) $('.pagination li').last().addClass('disabled');
+      if (txs.length < 100 && page == maxPage) $('.pagination li').last().addClass('disabled');
     }
 
     $(document).ready(function() {
