@@ -74,7 +74,7 @@ block content
       else if (selectedPage == '+') page++;
       else page = parseInt(selectedPage);
 
-      if (page > maxPage) loadTxs()
+      if (page > maxPage || page < (Math.ceil(page / 10) * 10) - 10 + 1) loadTxs()
       else drawTable();
     }
 
