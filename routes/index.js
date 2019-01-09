@@ -216,8 +216,8 @@ router.get('/ext/getlasttxs/:min', function(req,res){
   });
 });
 
-router.get('/ext/getpagetxs/:start', function(req,res){
-  db.get_page_txs(parseInt(process.env.LAST_TXS), req.params.start, function(txs){
+router.get('/ext/getpagetxs/:cat/:id', function(req,res){
+  db.get_page_txs(parseInt(process.env.LAST_TXS), req.params.cat, req.params.id, function(txs){
     res.send({data: txs});
   });
 });

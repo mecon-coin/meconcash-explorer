@@ -42,6 +42,7 @@ block content
     var maxPage = 1;
     var txs;
     var lastId;
+    var fisrtId;
 
     function loadLasttxs() {
       $.get( '/ext/getlasttxs/0.00000001', function( result ) {
@@ -50,19 +51,24 @@ block content
           maxPage = (page - 1) + Math.ceil(txs.length / 10);
 
           lastId = txs[txs.length - 1]['_id']
+          fisrtId = txs[0]['_id']
 
           drawTable();
         }
       });
     }
 
-    function loadTxs() {
-      $.get( '/ext/getpagetxs/' + lastId, function( result ) {
+    function loadTxs(isBigger) {
+      var url = '/ext/getpagetxs';
+      if (isBigger) url += '/more/' + lastId;
+      else url += '/less/' + fisrtId;
+      $.get(url, function( result ) {
         if (result.data.length) {
           txs = result.data;
           maxPage = Math.ceil(page / 10) * 10;
 
           lastId = txs[txs.length - 1]['_id']
+          fisrtId = txs[0]['_id']
 
           drawTable();
         }
@@ -74,7 +80,8 @@ block content
       else if (selectedPage == '+') page++;
       else page = parseInt(selectedPage);
 
-      if (page > maxPage || page <= maxPage - 10) loadTxs()
+      if (page > maxPage) loadTxs(true)
+      else if (page <= maxPage - 10) loadTxs(false)
       else drawTable();
     }
 
