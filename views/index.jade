@@ -81,7 +81,7 @@ block content
     function drawTable() {
       $('#block-table tbody').html('');
 
-      var start = ((page - 1) % 10);
+      var start = ((page - 1) % 10) * 10;
       for (var i = start; i < start + 10 && i < txs.length; i++) {
         var row = '<tr>';
         row = row + '<td scope="row"><a class="text-white" href="/block/' + txs[i]['blockindex'] + '">' + txs[i]['blockindex'] + '</a></td>';
@@ -95,7 +95,7 @@ block content
 
       $('.pagination').html('');
       $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("-")\' class="page-link">Previous</a></li>');
-      for (var i = page; i < maxPage; i++) {
+      for (var i = page; i <= maxPage; i++) {
         $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("' + i + '")\' class="page-link">' + i + '</a></li>');
         if (i == page) $('.pagination li').last().addClass('active');
       }
