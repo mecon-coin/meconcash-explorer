@@ -95,7 +95,7 @@ block content
 
       $('.pagination').html('');
       $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("-")\' class="page-link">Previous</a></li>');
-      for (var i = page; i <= maxPage; i++) {
+      for (var i = (Math.ceil(page / 10) * 10) - 10 + 1; i <= maxPage; i++) {
         $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("' + i + '")\' class="page-link">' + i + '</a></li>');
         if (i == page) $('.pagination li').last().addClass('active');
       }
