@@ -95,14 +95,14 @@ block content
 
       $('.pagination').html('');
       $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("-")\' class="page-link">Previous</a></li>');
-      for (var i = (Math.ceil(page / 10) * 10) - 10 + 1; i <= maxPage; i++) {
+      for (var i = (Math.ceil(page / 10) * 10) - 10 + 1; i <= page + maxPage; i++) {
         $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("' + i + '")\' class="page-link">' + i + '</a></li>');
         if (i == page) $('.pagination li').last().addClass('active');
       }
       $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("+")\' class="page-link">Next</a></li>');
 
       if (page == 1) $('.pagination li').first().addClass('disabled');
-      if (page == maxPage && maxPage < 10) $('.pagination li').last().addClass('disabled');
+      if (page == page + maxPage && maxPage < 10) $('.pagination li').last().addClass('disabled');
     }
 
     $(document).ready(function() {
