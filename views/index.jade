@@ -47,7 +47,7 @@ block content
       $.get( '/ext/getlasttxs/0.00000001', function( result ) {
         if (result.data.length) {
           txs = result.data;
-          maxPage = Math.ceil(txs.length / 10);
+          maxPage = (page - 1) + Math.ceil(txs.length / 10);
 
           lastId = txs[txs.length - 1]['_id']
 
@@ -60,7 +60,7 @@ block content
       $.get( '/ext/getpagetxs/' + lastId, function( result ) {
         if (result.data.length) {
           txs = result.data;
-          maxPage = Math.ceil(txs.length / 10);
+          maxPage = (page - 1) + Math.ceil(txs.length / 10);
 
           lastId = txs[txs.length - 1]['_id']
 
@@ -72,7 +72,7 @@ block content
     function changePage(selectedPage) {
       if (selectedPage == '-') page--;
       else if (selectedPage == '+') page++;
-      else page = selectedPage;
+      else page = parseInt(selectedPage);
 
       if (page > maxPage) loadTxs()
       else drawTable();
@@ -95,14 +95,14 @@ block content
 
       $('.pagination').html('');
       $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("-")\' class="page-link">Previous</a></li>');
-      for (var i = (Math.ceil(page / 10) * 10) - 10 + 1; i <= page + maxPage; i++) {
+      for (var i = (Math.ceil(page / 10) * 10) - 10 + 1; i <= maxPage; i++) {
         $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("' + i + '")\' class="page-link">' + i + '</a></li>');
         if (i == page) $('.pagination li').last().addClass('active');
       }
       $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("+")\' class="page-link">Next</a></li>');
 
       if (page == 1) $('.pagination li').first().addClass('disabled');
-      if (page == page + maxPage && maxPage < 10) $('.pagination li').last().addClass('disabled');
+      if (page == maxPage) $('.pagination li').last().addClass('disabled');
     }
 
     $(document).ready(function() {
