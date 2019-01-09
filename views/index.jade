@@ -41,12 +41,28 @@ block content
     var page = 1;
     var maxPage = 1;
     var txs;
+    var lastId;
 
     function loadLasttxs() {
       $.get( '/ext/getlasttxs/0.00000001', function( result ) {
         if (result.data.length) {
           txs = result.data;
           maxPage = Math.ceil(txs.length / 10);
+
+          lastId = txs[txs.length - 1]['_id']
+
+          drawTable();
+        }
+      });
+    }
+
+    function loadTxs() {
+      $.get( '/ext/getpagetxs/' + lastId, function( result ) {
+        if (result.data.length) {
+          txs = result.data;
+          maxPage = Math.ceil(txs.length / 10);
+
+          lastId = txs[txs.length - 1]['_id']
 
           drawTable();
         }
@@ -58,13 +74,14 @@ block content
       else if (selectedPage == '+') page++;
       else page = selectedPage;
 
-      drawTable();
+      if (page > maxPage) loadTxs()
+      else drawTable();
     }
 
     function drawTable() {
       $('#block-table tbody').html('');
 
-      var start = ((page - 1) * 10);
+      var start = ((page - 1) % 10);
       for (var i = start; i < start + 10 && i < txs.length; i++) {
         var row = '<tr>';
         row = row + '<td scope="row"><a class="text-white" href="/block/' + txs[i]['blockindex'] + '">' + txs[i]['blockindex'] + '</a></td>';
@@ -78,19 +95,19 @@ block content
 
       $('.pagination').html('');
       $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("-")\' class="page-link">Previous</a></li>');
-      for (var i = 0; i < maxPage; i++) {
-        $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("' + (i + 1) + '")\' class="page-link">' + (i + 1) + '</a></li>');
-        if (i + 1 == page) $('.pagination li').last().addClass('active');
+      for (var i = page; i < maxPage; i++) {
+        $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("' + i + '")\' class="page-link">' + i + '</a></li>');
+        if (i == page) $('.pagination li').last().addClass('active');
       }
       $('.pagination').append('<li class="page-item"><a href=\'javascript:changePage("+")\' class="page-link">Next</a></li>');
 
       if (page == 1) $('.pagination li').first().addClass('disabled');
-      if (page == maxPage) $('.pagination li').last().addClass('disabled');
+      if (page == maxPage && maxPage < 10) $('.pagination li').last().addClass('disabled');
     }
 
     $(document).ready(function() {
       loadLasttxs();
     });
-    setInterval(function() {
-      loadLasttxs();
-    }, 60000);
+    //- setInterval(function() {
+    //-   loadLasttxs();
+    //- }, 60000);
