@@ -60,7 +60,7 @@ block content
       $.get( '/ext/getpagetxs/' + lastId, function( result ) {
         if (result.data.length) {
           txs = result.data;
-          maxPage = (page - 1) + Math.ceil(txs.length / 10);
+          maxPage = Math.ceil(page / 10) * 10;
 
           lastId = txs[txs.length - 1]['_id']
 
